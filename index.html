@@ -248,6 +248,12 @@ function extractQty(lower) {
   // "500 mounting brackets", "qty 120", "quantity: 50"
   let m = lower.match(/(?:qty|quantity)[:\s]+(\d[\d,]*)/);
   if (m) return m[1];
+     // "around 75", "about 100", "roughly 50" — number after hedge words
+  m = lower.match(/(?:around|about|approx\.?|approximately|roughly|~)\s*(\d[\d,]*)/);
+  if (m) return m[1];
+  // "75 pcs", "100 pieces", "50 units"
+  m = lower.match(/(\d[\d,]*)\s*(?:pcs|pieces|units|ea)\b/);
+  if (m) return m[1];
   // "500 mounting brackets" — a number, maybe one word, then a part word
   m = lower.match(new RegExp("(\\d[\\d,]*)\\s+(?:\\w+\\s+)?(?:" + PART_WORDS.join("|") + ")"));
   return m ? m[1] : null;
